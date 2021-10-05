@@ -1,0 +1,6 @@
+typy z dużych liter
+funkcje z małej
+f:: arg1->arg2->returnval
+
+doubleMe x = 2*x
+SubSeq 3 doubleMe
