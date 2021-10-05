@@ -1,4 +1,3 @@
-
 fun :: Double -> Double -> Double
 fun x y = ((x * x - 3 * y) / (x + y * y) + 10)
 
@@ -27,23 +26,13 @@ stir x y
   | x == 0 = 0
   | otherwise = stir (x - 1) (y - 1) + y * stir (x - 1) y
 
-sumSeq:: Int ->(Int, Int)-> Int
+xd :: Int -> Int
+xd x = x
 
-sumSeq x f
-    | x==0 = 0
-    | x==1 = f(i, j)
-    | x>1  = f(i, j) + sumSeq (x-1) i (j-1)
-    | otherwise =0
+sumSeq :: Int -> (Int -> Int) -> Int
+sumSeq 1 f = f 1
+sumSeq n f = sumSeq (n - 1) f + f n
 
-
-
-
-applyTwice :: (Int -> Int) -> Int -> Int
-applyTwice f x = f (f x)
-double :: Int -> Int
-double x = 2 * x
-next :: Int -> Int
-next x = x + 1
-main = do
-  print (applyTwice double 2) -- quadruples
-  print (applyTwice next 1) --adds 2
+bell :: Int -> Int -> (Int -> Int -> Int) -> Int
+bell n 1 f = f 1 1
+bell n k f = bell n (k - 1) f + f n k
