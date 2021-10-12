@@ -10,3 +10,20 @@ commonPrefix :: String -> String -> String
 commonPrefix a [] = a
 commonPrefix [] b = b
 commonPrefix (a:as) (b:bs) =  if (a == b) then [a] ++ commonPrefix as bs else []
+
+-- int2Bin :: Int -> Int
+-- int2Bin [0] = 0
+-- int2Bin [1] = 1
+-- Int2Bin x = (x `div` 2) ++ int2Bin [n `mod` 2]
+
+merge :: [Int] -> [Int] -> [Int]
+merge [] a = a
+merge b [] = b
+merge (a:as) (b:bs) = if a <= b then [a] ++ merge as (b:bs) else [b] ++ merge (a:as) bs
+
+mergeSort :: [Int] -> [Int]
+mergeSort [x] = [x]
+mergeSort x = merge (mergeSort a) (mergeSort b)
+    where
+        a = take (div (length x) 2) x
+        b = drop (div (length x) 2) x
