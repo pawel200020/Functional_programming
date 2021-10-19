@@ -25,7 +25,7 @@ stir x y
   | y == 0 = 0
   | x == 0 = 0
   | otherwise = stir (x - 1) (y - 1) + y * stir (x - 1) y
-
+--funkcja zwracajaca funkcje - zadanie domowe
 xd :: Int -> Int
 xd x = x
 
