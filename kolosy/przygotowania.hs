@@ -1,5 +1,4 @@
 
-
 --  data Nat = Zero | Nast Nat
 
 --  nat2int :: Nat -> Integer
@@ -21,9 +20,6 @@
 --  mnozNat (x, Zero) = Zero
 --  mnozNat (x, Nast y) = dodNat(x, mnozNat (x, y))
 
-
-
-
 --  instance Eq Nat where
 --      (==) Zero Zero  = True
 --      (==) (Nast x) Zero = False
@@ -34,7 +30,7 @@
 -- iter (0, f) x = x
 -- iter (n, f) x = f (iter (n - 1, f) x)
 
--- f :: Integer ->Integer 
+-- f :: Integer ->Integer
 -- f x = x
 
 --  fibS :: Integer -> (Integer, Integer)
@@ -45,15 +41,26 @@
 --  fib :: Integer -> Integer
 --  fib a = fst( fibS a)
 
- rekdefp :: (a -> b -> b) -> b -> [a] -> b
- rekdefp h e [] = e
- rekdefp h e (x:xs) = h x (rekdefp h e xs)
+rekdefp :: (a -> b -> b) -> b -> [a] -> b
+rekdefp h e [] = e
+rekdefp h e (x : xs) = h x (rekdefp h e xs)
 
- dl :: [a] -> Integer
- dl x = rekdefp dodaj1 0 x
-    where dodaj1 x n = n + 1
+dl :: [a] -> Integer
+dl x = rekdefp dodaj1 0 x
+  where
+    dodaj1 x n = n + 1
 
- f:: Int->[Int]
- f _ = filter (<50) (map kw [0..]) 
+f :: Int -> [Int]
+f _ = filter (< 50) (map kw [0 ..])
 
- kw x = x*x
+kw x = x * x
+
+
+listaKwadratow n = iterate (\x -> x * n) n
+
+
+dupa :: Int -> Int -> [Int]
+dupa n k = take k (listaKwadratow n)
+
+
+doNJednykek n = takeWhile (\x->x<n*n) (listaKwadratow n)
