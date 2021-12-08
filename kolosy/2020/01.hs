@@ -1,3 +1,5 @@
+import Distribution.Simple.Test.Log (countTestResults)
+
 type Point = (Double, Double)
 
 last1:: (Point, Point, Double) -> Double
@@ -14,4 +16,3 @@ minDistP p list = minList (map (\x -> (dist x p)) (filter (/=p) (list)))
 
 minDist :: [Point] -> (Point, Point, Double)
 minDist list = minList (map (\x-> (minDistP x list)) list)
-
