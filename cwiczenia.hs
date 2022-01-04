@@ -1,4 +1,3 @@
-
 stir:: Int -> Int -> Int 
 stir 0 0 = 1
 stir 0 k = 0
