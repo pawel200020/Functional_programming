@@ -70,6 +70,10 @@ subsets :: [Int] -> [[Int]]
 subsets [] = [[]]
 subsets (x : xs) = subsets xs ++ map (x :) (subsets xs)
 
+subsets1 :: [Int] -> [[Int]]
+subsets1 [] = [[]]
+subsets1 (x : xs) = filter (\x-> length x>1)( subsets xs ++ map (x :) (subsets xs))
+
 --square root
 funkc :: Double -> Double -> Double
 funkc a x = (1 / 2) * (x + a / x)
@@ -111,3 +115,13 @@ getList n (x : xs) = [x] ++ getList (n - 1) xs
 
 thueMorse :: Int -> String
 thueMorse n = last (getList (logg2 (countSize n) 0) (iterate hstr "a"))
+
+listMerger :: [[Int]]->[[Int]]->[[Int]]
+listMerger [][] = []
+listMerger (x:xs) (y:ys)= (x++y) : listMerger xs ys
+
+findElem:: [Int]->Int-> Bool
+findElem list item = if (length (filter (\x->x==item) list)>0) then True else False
+
+removeDubs :: [Int] -> [Int]
+removeDubs  = foldl (\acc x -> if not (findElem acc x)  then acc++[x] else acc) [] 
