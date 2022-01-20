@@ -34,22 +34,32 @@ listMerger :: [[Int]]->[[Int]]->[[Int]]
 listMerger [][] = []
 listMerger [] y = y
 listMerger x [] = x
-listMerger (x:xs) (y:ys)= if(x<y) then (x++y) : listMerger xs ys else (y++x) : listMerger xs ys 
+listMerger (x:xs) (y:ys)= if(x<y) then (x++y) : listMerger xs ys else (y++x) : listMerger xs ys
 
 getNeighbours :: Int->[([Int],[[Int]])] ->[[Int]]
 getNeighbours num list = snd (head (filter (\x-> fst x== [num]) list))
 
+getNeighbours2 :: [Int]->[([Int],[[Int]])] ->([Int],[[Int]])
+getNeighbours2 num list = (head (filter (\x-> fst x== num) list))
+
 findElem:: [Int]->Int-> Bool
-findElem list item = if (length (filter (\x->x==item) list)>0) then True else False
+findElem list item = length (filter (\x->x==item) list)>0
 
 removeDubs :: [Int] -> [Int]
-removeDubs  = foldl (\acc x -> if not (findElem acc x)  then acc++[x] else acc) [] 
+removeDubs  = foldl (\acc x -> if not (findElem acc x)  then acc++[x] else acc) []
 
 convert2 :: [Int]->[([Int],[[Int]])]->[[Int]]
 convert2 (l:list) graph= foldl(\acc x->(listMerger (getNeighbours x graph) acc)) (getNeighbours l graph) list
 
 finalconvert2::[([Int],[[Int]])]->[([Int],[[Int]])]
 finalconvert2 graph = tail (foldl (\acc x->acc++[(x, map removeDubs (convert2 x graph))]) [([],[[]])] (filter (\x-> length x>1)(subsets (takeFirst graph))))
+
+-- isOnList:: [[Int]]->[Int]->Bool
+-- isOnList [] _ = False
+-- isOnList (l:list) item = (l == item) || isOnList list item
+
+--checkHim:: [([Int],[[Int]])]->([Int],[[Int]]) -> [[Int]]->[[Int]]
+
 main = do
         (inFileName:_) <-getArgs
         inFileHandle <-openFile inFileName ReadMode
