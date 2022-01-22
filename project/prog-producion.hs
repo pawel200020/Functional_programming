@@ -1,4 +1,3 @@
-import Debug.Trace
 import System.IO
 import System.Environment
 
@@ -76,9 +75,6 @@ generateRestGraph (s:subsets) graph alphabet = (s,generateNeighbor s graph (sAlp
             if the_letter == letter
               then True
               else hasLetter rest letter
-          --case n of
-          --  (_, letter) -> True
-          --  _ -> hasLetter rest letter
 
     -- czy dana litera, dla danego grafu i danego zbioru stanów
     -- może być wybrana w każdym z tych stanów?
@@ -151,25 +147,21 @@ printGentleData (node:rest) = do
                                 print node
                                 printGentleData rest
 
--- BFS (?)
+-- BFS
 
 type BFSNode = (Node2, String)
 
 mbSyncWord :: Graph2 -> Maybe String
 mbSyncWord graph =
-  let t = anySingleStateinGraph2 graph
-  in
-    if traceShow t t
-      then
-        -- find the "longest" state
-        let s = longestState graph
-            start = trace ("The longest:" ++ (show s)) s
-        -- add the found node to the list
-        -- start the list analysis
-        in  bfsSearch graph [] $ map (\n -> (n, "")) start
-      
-      else
-        trace "Nic z tego" Nothing
+  if anySingleStateinGraph2 graph
+    then
+      -- find the "longest" states list
+      let start = longestState graph
+      -- start the list analysis
+      in  bfsSearch graph [] $ map (\n -> (n, "")) start
+    
+    else
+      Nothing
 
 longestState :: Graph2 -> [Node2]
 longestState graph =
@@ -188,10 +180,9 @@ bfsSearch graph tabu_node_states lst =
     [] -> Nothing
     (bfs_node : rest) ->
       let
-        (node, current_word) = trace ("bfs node:" ++ (show bfs_node)) bfs_node
+        (node, current_word) = bfs_node
         -- interesuje nas lista stanów oraz lista możliwych przejść
         (node_states, moves) = node
-        _ = trace ("Checking moves: " ++ (show moves)) moves
         -- jeśli na tej liście jest jakiś singleton, to koniec i sukces
         -- w przeciwnym przypadku trzeba dodać kolejne możliwości do listy
       in
@@ -249,17 +240,6 @@ main = do
           Just word ->
             print $ "Automaton is synchronizing: " ++ word
 
-        --if (not.anyRouteToZero) graph || anySingleState graph
-        --        then do
-        --                print "Automation is not synchronizing"
-        --                return ()
-        --        else do
-        --                if anySingleStateinGraph2 graph2
-        --                        then do
-        --                                hClose inFileHandle
-        --                        else do
-        --                                print "Automation is not synchronizing"
-        --                                return ()
                                 
 qsort :: [Int] -> [Int]
 qsort [] = []
