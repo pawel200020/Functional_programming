@@ -111,19 +111,9 @@ main = do
         print alphabet
         let graph = (convertData.tail) list
         printGentleData graph
-        if (not.anyRouteToZero) graph || anySingleState graph
-                then do
-                        print "Automation is not synchronizing"
-                        return ()
-                else do
-                        let graph2 = generateRestGraph (generateSubsets graph) graph alphabet
-                        if anySingleStateinGraph2 graph2
-                                then do
-                                        printGentle graph2
-                                        hClose inFileHandle
-                                else do
-                                        print "Automation is not synchronizing"
-                                        return ()
+        let graph2 = generateRestGraph (generateSubsets graph) graph alphabet
+        printGentle graph2
+        hClose inFileHandle
                                 
 qsort :: [Int] -> [Int]
 qsort [] = []
