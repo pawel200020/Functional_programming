@@ -14,4 +14,7 @@ readUntilDot = do
 main :: IO ()
 main = do 
          print "podaj n: "
+         num <-  getLine
+         let num2 = read num ::Int
+         print num2
          readUntilDot
