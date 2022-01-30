@@ -228,39 +228,26 @@ singletonWord lst =
 
 main :: IO ()
 main = do
-        (inFileName:_) <-getArgs
-        inFileHandle <-openFile inFileName ReadMode
-        list<-readFileToList inFileHandle
-        print list
-        let alphabet = (parseAlphabet.head) list
-        print alphabet
-        let graph = (convertData.tail) list
-        printGentleData graph
-        let graph2 = generateRestGraph (generateSubsets graph) graph alphabet
-        print "Graf:"
-        printGentle graph2
-        print "Koniec grafu"
-
-        let sync_word = mbSyncWord graph2
-        case sync_word of
+        (inFileName:_) <-getArgs                        --pobranie nazwy pliku jako argument
+        inFileHandle <-openFile inFileName ReadMode     --otwarcie pliku, "uzyskanie uchwytu"
+        list<-readFileToList inFileHandle               --wczytanie danych z pliku do listy stringów
+        --print list                                    --opcjonalne wypisanie "surowych danych z pliku"                   
+        let alphabet = (parseAlphabet.head) list        -- w głowie listy znajduje się alfabet, parsuję go do listy stringów ["a","b",...]
+        --print alphabet                                --opcjonalne wypisanie zparsowanego alfabetu
+        let graph = (convertData.tail) list             --konwersja reszty danych na graf 
+        printGentleData graph                           --opcjonalne wypisanie zparsowanych danych które reprezentują nasz graf
+        let graph2 = generateRestGraph (generateSubsets graph) graph alphabet     --generuję drugi graf konstrukcją podzbiorów tzn generuję wszystkie podzbiory zbioru wierzchołków grafu 1 szego a potem generuję dla nich sąsiadów na podstawie grafu 1 i alfabetu
+        print "Graf2:"
+        printGentle graph2                              --opcjonalne wypisanie grafu2
+        --przechodzimy do najważnieszego, funkcja mbSyncWord zwaraca Nothing jeśli algorytm bfs nie znalazł ścieżki od stanu zawierającego numery wszystkich stanów w rozszeżonym grafie do singletonu, natomiast jeśli znalazł taką ścieżkę to dostajemy najkrótsze słowo synchronizujące. Najkrótsze dlatego, że bfs znajduje zawsze najkrótszą ścieżkę.
+        let sync_word = mbSyncWord graph2            
+        case sync_word of                             --prosty case sprawdzający co zwraca mbSyncWord
           Nothing ->
             print "Automaton is not synchronizing. Sorry."
 
           Just word ->
             print $ "Automaton is synchronizing: " ++ word
-
-        --if (not.anyRouteToZero) graph || anySingleState graph
-        --        then do
-        --                print "Automation is not synchronizing"
-        --                return ()
-        --        else do
-        --                if anySingleStateinGraph2 graph2
-        --                        then do
-        --                                hClose inFileHandle
-        --                        else do
-        --                                print "Automation is not synchronizing"
-        --                                return ()
-                                
+--quick sort który wykorzystuję przy sortowaniu podzbiorów stanów które wygenerowałem                           
 qsort :: [Int] -> [Int]
 qsort [] = []
 qsort (x:xs) = (qsort left) ++ [x]++(qsort right)
