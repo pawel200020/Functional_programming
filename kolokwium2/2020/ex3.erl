@@ -1,24 +1,24 @@
 -module (ex3).
 -compile (export_all).
 process()->receive
-            {[A,B|ListOfNumbers],[C|ListOfProcess]} ->  Temp = A + B,
-                                                        List = [A]++[B]++ListOfNumbers,
-                                                        io:format(" ~p \n", [List]),
-                                                        List2 = [Temp]++List,                                                        
-                                                       if
-                                                            length(List2)>4 ->
-                                                                C ! {lists:sublist(List2,2),ListOfProcess++[C]};
-                                                            true ->
-                                                                C ! {List2,ListOfProcess++[C]}
-                                                        end
+            {Number,[{Id,C}|ListOfProcess]} ->  
+                                            {IdMy, _} = lists:last(ListOfProcess),     
+                                            io:format(" (~p,~p) \n", [IdMy,Number]),                                                      
+                                            if
+                                                IdMy rem 2 == 0 ->
+                                                    C ! {Number*2,ListOfProcess++[{Id,C}]};
+                                                true ->
+                                                    C ! {Number-1,ListOfProcess++[{Id,C}]}
+                                            end
                                                     
             end,
             timer:sleep(1000),
             process().
 
-startProcesses(1)->[spawn(ex3,process,[])];                                                
-startProcesses(N)->[spawn(ex3,process,[])]++startProcesses(N-1).
+startProcesses(2)->[{2,spawn(ex3,process,[])}];                                                
+startProcesses(N)->[{N,spawn(ex3,process,[])}]++startProcesses(N-1).
 
-start(N,K)->    List = startProcesses(N),
-                io:format(" ~p \n", [List]),
-                lists:last(List) ! {[K,1],List}.
+start(N,X)->    List = startProcesses(N),
+                List2 = lists:reverse(List)++[{1,spawn(ex3,process,[])}],
+                {_,PID}=lists:last(List2),
+                PID ! {X,List2}.

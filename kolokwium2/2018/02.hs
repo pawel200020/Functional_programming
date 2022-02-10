@@ -1,12 +1,13 @@
-readUntilDot ::IO()
-readUntilDot = do
-    nStr <- getLine
-    if nStr  =="." then return () else do
-        putStrLn (reverse nStr)
-        readUntilDot
+todoList :: [IO ()]
 
+todoList = [putChar 'a',
+            do putChar 'b'
+               putChar 'c',
+            do c <- getChar
+               putChar c]
 
-main :: IO ()
-main = do 
-         print "podaj n: "
-         readUntilDot
+sequence2_        :: [IO a] -> a -> IO ()
+sequence2_ [] _    =  return ()
+sequence2_ (a:as) x =  do 
+                    sequence2_ as x
+                     --a x
